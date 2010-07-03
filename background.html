@@ -1,0 +1,44 @@
+<html>
+<head>
+</head>
+<body>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript">
+    console.log(chrome.extension.getURL("images/myimage.png"));
+    function getImdbRating(title, callback) {
+        var query = "http://www.google.com/search?q=" + encodeURIComponent(title + " site:imdb.com");
+    
+        //console.log(query); 
+        $.get(query, function (data) {
+            var ratingMatch = data.match(/Rating: (\d.\d)\/10/);
+            var imdbIdMatch = data.match(/www.imdb.com\/title\/(tt\d+)\/"/);
+            var rating = null;
+            var url = null;
+
+            if (ratingMatch) {
+                rating = ratingMatch[1];
+                //console.log("Rating is -" + rating + "-");
+            }
+
+            if (imdbIdMatch) {
+                var imdbId = imdbIdMatch[1];
+                //console.log("ID is " + imdbId);
+                url = "http://www.imdb.com/title/" + imdbId;
+            }
+            //console.log("Calling. " + title + " " + rating);
+            callback({title: title, rating: rating, url: url});
+        });
+    }      
+      
+    function onRequest(request, sender, callback) {
+        if (request.action == 'getImdbRating') {
+            getImdbRating(request.title, callback);
+        }
+    };
+
+    chrome.extension.onRequest.addListener(onRequest);
+</script>
+</body>
+</html>
+

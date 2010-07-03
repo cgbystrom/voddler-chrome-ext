@@ -1,0 +1,11 @@
+{
+    "name": "Voddler Tweaks",
+    "version": "1.0",
+    "description": "Adds IMDB ratings to Voddler movies.",
+    "background_page" : "background.html",
+    "content_scripts": [{
+        "matches": ["http://www.voddler.com/*"],
+        "js": ["jquery.min.js", "voddler.js"]
+    }],
+    "permissions": ["http://www.google.com/*"] 
+}
